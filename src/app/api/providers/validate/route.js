@@ -171,8 +171,7 @@ export async function POST(request) {
         case "assemblyai":
         case "nanobanana":
         case "chutes":
-        case "nvidia":
-        case "opencode": {
+        case "nvidia": {
           const endpoints = {
             deepseek: "https://api.deepseek.com/models",
             groq: "https://api.groq.com/openai/v1/models",

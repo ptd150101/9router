@@ -356,6 +356,7 @@ async function testApiKeyConnection(connection, effectiveProxy = null) {
   }
 
   try {
+    console.log("[OPENCODE TEST] Testing provider:", connection.provider);
     switch (connection.provider) {
       case "openai": {
         const res = await fetchWithConnectionProxy("https://api.openai.com/v1/models", { headers: { Authorization: `Bearer ${connection.apiKey}` } }, effectiveProxy);
@@ -508,11 +509,15 @@ async function testApiKeyConnection(connection, effectiveProxy = null) {
         return { valid: res.ok, error: res.ok ? null : "Invalid API key" };
       }
       case "opencode": {
+        console.log("[OPENCODE TEST] Testing connection with API key:", connection.apiKey?.slice(0, 10) + "...");
         const res = await fetchWithConnectionProxy("https://opencode.ai/zen/go/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": `Bearer ${connection.apiKey}`, "Content-Type": "application/json", "x-opencode-client": "desktop" },
           body: JSON.stringify({ model: "mimo-v2-pro", max_tokens: 1, messages: [{ role: "user", content: "hi" }] }),
         }, effectiveProxy);
+        console.log("[OPENCODE TEST] Response status:", res.status);
+        const text = await res.text();
+        console.log("[OPENCODE TEST] Response body:", text.slice(0, 500));
         const valid = res.status !== 401;
         return { valid, error: valid ? null : "Invalid API key" };
       }
@@ -529,6 +534,7 @@ async function testApiKeyConnection(connection, effectiveProxy = null) {
  */
 export async function testSingleConnection(id) {
   const connection = await getProviderConnectionById(id);
+  console.log("[OPENCODE TEST] Connection found:", connection ? `provider=${connection.provider}, authType=${connection.authType}` : "null");
   if (!connection) return { valid: false, error: "Connection not found", latencyMs: 0, testedAt: new Date().toISOString() };
 
   const effectiveProxy = await resolveConnectionProxyConfig(connection.providerSpecificData || {});

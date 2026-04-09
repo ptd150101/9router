@@ -239,6 +239,7 @@ export async function POST(request) {
 
         case "opencode": {
           try {
+            console.log("[OPENCODE VALIDATE] Testing API key:", apiKey?.slice(0, 10) + "...");
             const opencodeRes = await fetch("https://opencode.ai/zen/go/v1/chat/completions", {
               method: "POST",
               headers: {
@@ -252,9 +253,13 @@ export async function POST(request) {
                 messages: [{ role: "user", content: "hi" }],
               }),
             });
+            console.log("[OPENCODE VALIDATE] Response status:", opencodeRes.status);
+            const text = await opencodeRes.text();
+            console.log("[OPENCODE VALIDATE] Response body:", text.slice(0, 500));
             isValid = opencodeRes.status !== 401;
             if (!isValid) error = "Invalid API key";
           } catch (e) {
+            console.log("[OPENCODE VALIDATE] Error:", e.message);
             error = e.message;
             isValid = false;
           }

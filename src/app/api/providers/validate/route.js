@@ -18,6 +18,9 @@ export async function POST(request) {
 
     // Validate with each provider
     try {
+      console.log("[OPENCODE VALIDATE] Provider:", provider, "API key starts with:", apiKey?.slice(0, 10));
+      console.log("[OPENCODE VALIDATE] Is OpenAI compatible:", isOpenAICompatibleProvider(provider));
+      console.log("[OPENCODE VALIDATE] Is Anthropic compatible:", isAnthropicCompatibleProvider(provider));
       if (isOpenAICompatibleProvider(provider)) {
         const node = await getProviderNodeById(provider);
         if (!node) {
@@ -274,6 +277,7 @@ export async function POST(request) {
       isValid = false;
     }
 
+    console.log("[OPENCODE VALIDATE] Final - isValid:", isValid, "error:", error);
     return NextResponse.json({
       valid: isValid,
       error: isValid ? null : (error || "Invalid API key"),

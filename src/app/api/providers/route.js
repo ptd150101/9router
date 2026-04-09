@@ -101,6 +101,8 @@ export async function POST(request) {
     // Validation
     const isValidProvider = APIKEY_PROVIDERS[provider] ||
       FREE_TIER_PROVIDERS[provider] ||
+      FREE_PROVIDERS[provider] ||
+      OAUTH_PROVIDERS[provider] ||
       isOpenAICompatibleProvider(provider) ||
       isAnthropicCompatibleProvider(provider);
 

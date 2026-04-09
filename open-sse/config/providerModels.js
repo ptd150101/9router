@@ -143,10 +143,19 @@ export const PROVIDER_MODELS = {
     { id: "deepseek/deepseek-reasoner", name: "DeepSeek Reasoner" },
   ],
   oc: [  // OpenCode
+    // /zen/v1/ models
     { id: "nemotron-3-super-free", name: "Nemotron 3 Super" },
     { id: "qwen3.6-plus-free", name: "Qwen 3.6 Plus" },
     // { id: "big-pickle", name: "Big Pickle", targetFormat: "claude" },
     { id: "minimax-m2.5-free", name: "MiniMax M2.5", targetFormat: "claude" },
+    // /zen/go/v1/ models
+    { id: "glm-5.1", name: "GLM-5.1" },
+    { id: "glm-5", name: "GLM-5" },
+    { id: "kimi-k2.5", name: "Kimi K2.5" },
+    { id: "mimo-v2-pro", name: "MiMo V2 Pro" },
+    { id: "mimo-v2-omni", name: "MiMo V2 Omni" },
+    { id: "minimax-m2.7", name: "MiniMax M2.7" },
+    { id: "minimax-m2.5", name: "MiniMax M2.5" },
   ],
 
   cl: [  // Cline

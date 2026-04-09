@@ -52,7 +52,7 @@ export default function ProviderDetailPage() {
         type: providerNode.type,
       }
     : (OAUTH_PROVIDERS[providerId] || APIKEY_PROVIDERS[providerId] || FREE_PROVIDERS[providerId] || FREE_TIER_PROVIDERS[providerId]);
-  const isOAuth = !!OAUTH_PROVIDERS[providerId] || !!FREE_PROVIDERS[providerId];
+  const isOAuth = (!!OAUTH_PROVIDERS[providerId] || !!FREE_PROVIDERS[providerId]) && !FREE_PROVIDERS[providerId]?.noAuth;
   const isFreeNoAuth = !!FREE_PROVIDERS[providerId]?.noAuth;
   const models = getModelsByProviderId(providerId);
   const providerAlias = getProviderAlias(providerId);
@@ -809,16 +809,21 @@ export default function ProviderDetailPage() {
       )}
 
       {/* Connections */}
-      {isFreeNoAuth ? (
+      {isFreeNoAuth && connections.length === 0 ? (
         <Card>
-          <div className="flex items-center gap-3">
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500/10 text-green-500">
-              <span className="material-symbols-outlined text-[20px]">lock_open</span>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-500/10 text-green-500">
+                <span className="material-symbols-outlined text-[20px]">lock_open</span>
+              </div>
+              <div>
+                <p className="text-sm font-medium">No authentication required</p>
+                <p className="text-xs text-text-muted">This provider is ready to use. Optionally add an API key for extended features.</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-medium">No authentication required</p>
-              <p className="text-xs text-text-muted">This provider is ready to use.</p>
-            </div>
+            <Button icon="add" variant="secondary" onClick={() => setShowAddApiKeyModal(true)}>
+              Add API Key
+            </Button>
           </div>
         </Card>
       ) : (

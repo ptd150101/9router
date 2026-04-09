@@ -32,6 +32,18 @@ export async function getProviderCredentials(provider, excludeConnectionIds = nu
 
     // Inject a virtual connection for no-auth free providers
     if (FREE_PROVIDERS[providerId]?.noAuth) {
+      // Check if user has configured a real API key connection first
+      const connections = await getProviderConnections({ provider: providerId, isActive: true });
+      if (connections.length > 0) {
+        const availableConnections = connections.filter(c => {
+          if (excludeSet.has(c.id)) return false;
+          if (isModelLockActive(c, model)) return false;
+          return true;
+        });
+        if (availableConnections.length > 0) {
+          return availableConnections[0];
+        }
+      }
       return { id: "noauth", connectionName: "Public", isActive: true, accessToken: "public" };
     }
 

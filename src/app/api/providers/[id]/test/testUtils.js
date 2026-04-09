@@ -511,7 +511,7 @@ async function testApiKeyConnection(connection, effectiveProxy = null) {
         const res = await fetchWithConnectionProxy("https://opencode.ai/zen/go/v1/chat/completions", {
           method: "POST",
           headers: { "Authorization": `Bearer ${connection.apiKey}`, "Content-Type": "application/json", "x-opencode-client": "desktop" },
-          body: JSON.stringify({ model: "glm-5.1", max_tokens: 1, messages: [{ role: "user", content: "hi" }] }),
+          body: JSON.stringify({ model: "mimo-v2-pro", max_tokens: 1, messages: [{ role: "user", content: "hi" }] }),
         }, effectiveProxy);
         const valid = res.status !== 401;
         return { valid, error: valid ? null : "Invalid API key" };

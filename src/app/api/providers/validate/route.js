@@ -247,7 +247,7 @@ export async function POST(request) {
                 "x-opencode-client": "desktop",
               },
               body: JSON.stringify({
-                model: "glm-5.1",
+                model: "mimo-v2-pro",
                 max_tokens: 1,
                 messages: [{ role: "user", content: "hi" }],
               }),

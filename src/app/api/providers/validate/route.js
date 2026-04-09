@@ -238,21 +238,26 @@ export async function POST(request) {
         }
 
         case "opencode": {
-          const opencodeRes = await fetch("https://opencode.ai/zen/go/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-              "x-opencode-client": "desktop",
-            },
-            body: JSON.stringify({
-              model: "glm-5.1",
-              max_tokens: 1,
-              messages: [{ role: "user", content: "hi" }],
-            }),
-          });
-          isValid = opencodeRes.status !== 401;
-          if (!isValid) error = "Invalid API key";
+          try {
+            const opencodeRes = await fetch("https://opencode.ai/zen/go/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+                "x-opencode-client": "desktop",
+              },
+              body: JSON.stringify({
+                model: "glm-5.1",
+                max_tokens: 1,
+                messages: [{ role: "user", content: "hi" }],
+              }),
+            });
+            isValid = opencodeRes.status !== 401;
+            if (!isValid) error = "Invalid API key";
+          } catch (e) {
+            error = e.message;
+            isValid = false;
+          }
           break;
         }
 

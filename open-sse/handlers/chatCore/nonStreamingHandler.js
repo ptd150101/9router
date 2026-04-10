@@ -154,6 +154,8 @@ export async function handleNonStreamingResponse({ providerResponse, provider, m
   if (onRequestSuccess) await onRequestSuccess();
 
   const usage = extractUsageFromResponse(responseBody);
+  console.log("[DEBUG] responseBody keys:", Object.keys(responseBody));
+  console.log("[DEBUG] usage:", usage);
   appendLog({ tokens: usage, status: "200 OK" });
   saveUsageStats({ provider, model, tokens: usage, connectionId, apiKey, endpoint: clientRawRequest?.endpoint });
 

@@ -51,6 +51,18 @@ export class OpenCodeExecutor extends BaseExecutor {
     return headers;
   }
 
+  transformRequest(model, body, stream, credentials) {
+    if (!GO_ANTHROPIC_MODELS.has(model)) return body;
+
+    // Strip params not supported by OpenCode's Anthropic-compatible endpoint
+    const clean = { ...body };
+    delete clean.temperature;
+    delete clean.output_config;
+    delete clean.metadata;
+
+    return clean;
+  }
+
   async execute({ model, body, stream, credentials, signal, log, proxyOptions = null }) {
     const credentialsWithModel = { ...credentials, model };
     return super.execute({ model, body, stream, credentials: credentialsWithModel, signal, log, proxyOptions });

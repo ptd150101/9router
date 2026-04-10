@@ -18,9 +18,6 @@ export async function POST(request) {
 
     // Validate with each provider
     try {
-      console.log("[OPENCODE VALIDATE] Provider:", provider, "API key starts with:", apiKey?.slice(0, 10));
-      console.log("[OPENCODE VALIDATE] Is OpenAI compatible:", isOpenAICompatibleProvider(provider));
-      console.log("[OPENCODE VALIDATE] Is Anthropic compatible:", isAnthropicCompatibleProvider(provider));
       if (isOpenAICompatibleProvider(provider)) {
         const node = await getProviderNodeById(provider);
         if (!node) {
@@ -241,7 +238,6 @@ export async function POST(request) {
 
         case "opencode": {
           try {
-            console.log("[OPENCODE VALIDATE] Testing API key:", apiKey?.slice(0, 10) + "...");
             const opencodeRes = await fetch("https://opencode.ai/zen/go/v1/chat/completions", {
               method: "POST",
               headers: {
@@ -254,14 +250,11 @@ export async function POST(request) {
                 max_tokens: 1,
                 messages: [{ role: "user", content: "hi" }],
               }),
+              signal: AbortSignal.timeout(5000),
             });
-            console.log("[OPENCODE VALIDATE] Response status:", opencodeRes.status);
-            const text = await opencodeRes.text();
-            console.log("[OPENCODE VALIDATE] Response body:", text.slice(0, 500));
             isValid = opencodeRes.status !== 401;
             if (!isValid) error = "Invalid API key";
           } catch (e) {
-            console.log("[OPENCODE VALIDATE] Error:", e.message);
             error = e.message;
             isValid = false;
           }
@@ -276,7 +269,6 @@ export async function POST(request) {
       isValid = false;
     }
 
-    console.log("[OPENCODE VALIDATE] Final - isValid:", isValid, "error:", error);
     return NextResponse.json({
       valid: isValid,
       error: isValid ? null : (error || "Invalid API key"),

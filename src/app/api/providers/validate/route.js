@@ -254,6 +254,7 @@ export async function POST(request) {
                 max_tokens: 1,
                 messages: [{ role: "user", content: "hi" }],
               }),
+              signal: AbortSignal.timeout(5000),
             });
             console.log("[OPENCODE VALIDATE] Response status:", opencodeRes.status);
             const text = await opencodeRes.text();

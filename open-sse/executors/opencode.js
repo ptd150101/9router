@@ -5,7 +5,8 @@ import { PROVIDERS } from "../config/providers.js";
 const V1_MESSAGES_MODELS = new Set(["big-pickle", "minimax-m2.5-free"]);
 // Go models that use /zen/go/v1/chat/completions (openai format)
 const GO_CHAT_MODELS = new Set([
-  "glm-5.1", "glm-5", "kimi-k2.5", "mimo-v2-pro", "mimo-v2-omni"
+  "glm-5.1", "glm-5", "kimi-k2.5", "qwen3.6-plus", "qwen3.5-plus",
+  "mimo-v2-pro", "mimo-v2-omni"
 ]);
 // Go models that use /zen/go/v1/messages (anthropic format)
 const GO_ANTHROPIC_MODELS = new Set(["minimax-m2.7", "minimax-m2.5"]);

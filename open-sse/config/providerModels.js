@@ -152,6 +152,8 @@ export const PROVIDER_MODELS = {
     { id: "glm-5.1", name: "GLM-5.1" },
     { id: "glm-5", name: "GLM-5" },
     { id: "kimi-k2.5", name: "Kimi K2.5" },
+    { id: "qwen3.6-plus", name: "Qwen 3.6 Plus" },
+    { id: "qwen3.5-plus", name: "Qwen 3.5 Plus" },
     { id: "mimo-v2-pro", name: "MiMo V2 Pro" },
     { id: "mimo-v2-omni", name: "MiMo V2 Omni" },
     // /zen/go/v1/messages - anthropic format

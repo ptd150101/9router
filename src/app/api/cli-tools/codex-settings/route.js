@@ -109,7 +109,7 @@ export async function GET() {
 // POST - Update 9Router settings (merge with existing config)
 export async function POST(request) {
   try {
-    const { baseUrl, apiKey, model } = await request.json();
+    const { baseUrl, apiKey, model, subagentModel } = await request.json();
     
     if (!baseUrl || !apiKey || !model) {
       return NextResponse.json({ error: "baseUrl, apiKey and model are required" }, { status: 400 });
@@ -141,6 +141,12 @@ export async function POST(request) {
       wire_api: "responses",
     });
 
+    // Add subagent configuration
+    const effectiveSubagentModel = subagentModel || model;
+    setNestedSection(parsed, "agents.subagent", {
+      model: effectiveSubagentModel,
+    });
+
     // Write merged config
     const configContent = stringifyTOML(parsed);
     await fs.writeFile(configPath, configContent);
@@ -153,7 +159,9 @@ export async function POST(request) {
       authData = JSON.parse(existingAuth);
     } catch { /* No existing auth */ }
     
+    // Force apikey mode (keep existing tokens untouched for ChatGPT login reuse)
     authData.OPENAI_API_KEY = apiKey;
+    authData.auth_mode = "apikey";
     await fs.writeFile(authPath, JSON.stringify(authData, null, 2));
 
     return NextResponse.json({
@@ -196,6 +204,9 @@ export async function DELETE() {
     // Remove 9router provider section
     deleteNestedSection(parsed, "model_providers.9router");
 
+    // Remove subagent configuration
+    deleteNestedSection(parsed, "agents.subagent");
+
     // Write updated config
     const configContent = stringifyTOML(parsed);
     await fs.writeFile(configPath, configContent);
@@ -206,7 +217,8 @@ export async function DELETE() {
       const existingAuth = await fs.readFile(authPath, "utf-8");
       const authData = JSON.parse(existingAuth);
       delete authData.OPENAI_API_KEY;
-      
+      delete authData.auth_mode;
+
       // Write back or delete if empty
       if (Object.keys(authData).length === 0) {
         await fs.unlink(authPath);
